@@ -1,0 +1,45 @@
+{% load static tailwind_tags %}
+{% tailwind_css %}
+<div class="flex flex-col gap-7 justify-center items-center">
+  <h1 class="text-3xl text-red-800">Gauss method</h1>
+  {{ info }}
+
+  <form method="POST">
+    {% csrf_token %}
+    <div>
+      <label for="rows">
+        Number of rows
+      </label>
+      <input type="number" id="rows" name="rows" value="{{number_of_rows}}" class="remove-arrow border border-gray-300
+      rounded-md px-2 py-1 mt-2 w-20">
+      <button class="py-1 px-2 bg-slate-400 border-2 border-slate-800 rounded-md hover:bg-slate-600 text-white" type="submit" value="rownum">
+        Submit
+      </button>
+    </div>
+  </form>
+
+    <div>
+      {% if rows %}
+        <form method="POST">
+          <div class="my-4 mx-auto px-2 border-x-2 border-x-gray-900 w-fit">
+            {% for i in rows %}
+            <div>
+              {% for i in rows %}
+               <input type="number" id="num-{{i}}" name="num-{{i}}" value="0" class="remove-arrow border border-gray-300
+               rounded-md px-4 py-2 mt-2 w-20"> x{{i}}
+                {% if i < number_of_rows %}
+                  +
+                {% elif i == number_of_rows %}
+                  =
+                {% endif %}
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </div>
+          <button class="w-full py-1 px-2 bg-slate-400 border-2 border-slate-800 rounded-md hover:bg-slate-600 text-white" type="submit" value="calucalte">
+            Calculate
+          </button>
+        </form>
+      {% endif %}
+    </div>
+</div>
