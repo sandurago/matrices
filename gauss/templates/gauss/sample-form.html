@@ -1,0 +1,18 @@
+Coucou, tu veux voir... ma BEAT ?
+
+<form method="POST">
+  {% csrf_token %}
+  <input type="number" name="rows" placeholder="Number of rows" value="{{nb_rows}}">
+
+  {% if rows %}
+    {% for r in rows %}
+      <input type="number" name="values" placeholder="Value">
+    {% endfor %}
+  {% endif %}
+
+  {% if values %}
+  {{ values }}
+  {% endif %}
+
+  <button type="submit">Submit</button>
+</form>

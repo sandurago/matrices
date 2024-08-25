@@ -2,44 +2,93 @@
 {% tailwind_css %}
 <div class="flex flex-col gap-7 justify-center items-center">
   <h1 class="text-3xl text-red-800">Gauss method</h1>
-  {{ info }}
+  {{info}}
 
   <form method="POST">
     {% csrf_token %}
+    <input type="number" name="number[]">
+        <input type="number" name="number[]">
+        <input type="number" name="number[]">
+        <input type="number" name="number[]">
+        <input type="number" name="number[]">
     <div>
       <label for="rows">
         Number of rows
       </label>
       <input type="number" id="rows" name="rows" value="{{number_of_rows}}" class="remove-arrow border border-gray-300
       rounded-md px-2 py-1 mt-2 w-20">
-      <button class="py-1 px-2 bg-slate-400 border-2 border-slate-800 rounded-md hover:bg-slate-600 text-white" type="submit" value="rownum">
+      <button class="py-1 px-2 bg-slate-400 border-2 border-slate-800 rounded-md hover:bg-slate-600 text-white" type="submit" name="number_of_rows">
         Submit
       </button>
     </div>
   </form>
 
+  {% if range_for_rows %}
     <div>
-      {% if rows %}
-        <form method="POST">
-          <div class="my-4 mx-auto px-2 border-x-2 border-x-gray-900 w-fit">
-            {% for i in rows %}
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="rows" value="{{number_of_rows}}">
+        <div class="my-4 mx-auto px-2 border-x-2 border-x-gray-900 w-fit">
+          {% for i in range_for_rows %}
+          <div class="flex flex-row gap-4">
             <div>
-              {% for i in rows %}
-               <input type="number" id="num-{{i}}" name="num-{{i}}" value="0" class="remove-arrow border border-gray-300
-               rounded-md px-4 py-2 mt-2 w-20"> x{{i}}
-                {% if i < number_of_rows %}
-                  +
-                {% elif i == number_of_rows %}
-                  =
+              {% for j in range_for_columns %}
+                <input type="number" id="num-{{i}}{{j}}" name="num-{{i}}{{j}}" value="0" class="remove-arrow border border-gray-300
+                rounded-md px-4 py-2 mt-2 w-20">
+                {% if j < number_of_rows %}
+                x{{j}} +
+                {% elif j == number_of_rows %}
+                + x{{j}} =
                 {% endif %}
               {% endfor %}
             </div>
-            {% endfor %}
           </div>
-          <button class="w-full py-1 px-2 bg-slate-400 border-2 border-slate-800 rounded-md hover:bg-slate-600 text-white" type="submit" value="calucalte">
-            Calculate
-          </button>
-        </form>
-      {% endif %}
+          {% endfor %}
+        </div>
+        <button class="w-full py-1 px-2 bg-slate-400 border-2 border-slate-800 rounded-md hover:bg-slate-600 text-white" type="submit" name="calculate">
+          Calculate
+        </button>
+      </form>
     </div>
+  {% endif %}
+
+  {% if initial_matrix is not None %}
+    <div class="flex flex-row gap-6">
+      <div class="flex flex-col items-center gap-4">
+        <p class="text-red-800">Initial matrix</p>
+        <table class="border-x-2 border-x-gray-900">
+          {% for row in initial_matrix %}
+            <tr class="py-2">
+              {% for cell in row %}
+              <td class="px-2">{{cell}}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="flex flex-col items-center gap-4">
+        {% if err %}
+          <p class="text-red-800">{{err}}</p>
+        {% else %}
+        <p class="text-red-800">Result</p>
+          <table class="border-x-2 border-x-gray-900">
+            {% for res in result %}
+              <tr class="py-2">
+                <td class="px-2">x{{ forloop.counter }} </td>
+                <td> = </td>
+                <td class="px-2">{{res}}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% endif %}
+      </div>
+    </div>
+    <form method="POST">
+      {% csrf_token %}
+      <label for="username">Your nickname:</label>
+      <input type="text" name="username" id="username" class="remove-arrow border border-gray-300
+      rounded-md px-4 py-2 mt-2 w-40">
+      <button class="py-1 px-2 bg-slate-400 border-2 border-slate-800 rounded-md hover:bg-slate-600 text-white" type="submit" name="save">Save result</button>
+    </form>
+  {% endif %}
 </div>
